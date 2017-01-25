@@ -5,8 +5,10 @@
   "main": "meadowlark.js",
   "dependencies": {
     "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
-    "express-handlebars": "^3.0.0"
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

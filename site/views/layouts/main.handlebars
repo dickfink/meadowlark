@@ -4,6 +4,13 @@
         <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
         <title>Meadowlark Travel</title>
     </head>
+    {{#if flash}}
+    <div>
+        {{flash.type}}<br />
+        {{flash.intro}}<br />
+        {{{flash.message}}}
+    </div>
+    {{/if}}
     <body>
         {{{body}}}
     </body>
