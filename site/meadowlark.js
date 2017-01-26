@@ -67,6 +67,21 @@ app.use(function(req, res, next){
     next();
 });
 
+//log random good thing
+// Get the count of all goodthings
+GoodThing.count().exec(function (err, count) {
+
+  // Get a random entry
+  var random = Math.floor(Math.random() * count)
+
+  // Again query all users but only fetch one offset by our random #
+  GoodThing.findOne().skip(random).exec(
+    function (err, goodThing) {
+      // Tada! random user
+      console.log(goodThing.thing); 
+    })
+});
+
 // routes
 app.get('/', function(req, res){
     // list all goodThings
