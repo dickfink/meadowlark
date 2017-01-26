@@ -81,6 +81,9 @@ app.get('/about', function(req, res){
 app.post('/', function(req, res){
     // log the form named "goodThing"
    console.log('Quote (from querystring):' + req.body.goodThing);
+   new GoodThing({
+       thing: req.body.goodThing,
+   }).save();
     // show success flash  
    req.session.flash = {
        type: 'success',
