@@ -69,7 +69,18 @@ app.use(function(req, res, next){
 
 // routes
 app.get('/', function(req, res){
-    res.render('home');
+    // list all goodThings
+        GoodThing.find(function(err, goodThings){
+        
+        var context = {
+            goodThings: goodThings.map(function(goodThing){
+                return {
+                    thing: goodThing.thing,
+                }
+            })
+        };
+        res.render('home', context);
+    });
 });
 
 app.get('/about', function(req, res){
@@ -81,14 +92,14 @@ app.get('/about', function(req, res){
 app.post('/', function(req, res){
     // log the form named "goodThing"
    console.log('Quote (from querystring):' + req.body.goodThing);
+    // add goodThing to DB   
    new GoodThing({
        thing: req.body.goodThing,
    }).save();
     // show success flash  
    req.session.flash = {
        type: 'success',
-       intro: 'Thank you!',
-       message: "You have now been signed up for the news letter.",
+       message: "You have added a good thing.",
    };
    //   redirect back to form page
    res.redirect(303, '/');

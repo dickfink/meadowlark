@@ -1,4 +1,4 @@
-<h1>Welcome to Meadowlark Travel</h1>
+<h1>Fill Up Your Good Thing Jar</h1>
 <form method="POST">
     <div>
         <label for="goodThing">A good thing that happened today</label>
@@ -8,3 +8,7 @@
         <button type="submit">Submit</button>
     </div>
 </form>
+
+{{#each goodThings}}
+<div>{{thing}}</div>
+{{/each}}
