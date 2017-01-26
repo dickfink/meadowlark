@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var fortune = require('./lib/fortune.js')
 var bodyParser  = require('body-parser');
-var credentials = require("./credentials.js")
+var credentials = require("./credentials.js");
 var GoodThing = require('./models/goodthing.js');
 // set up handlebars view engine
 var handlebars = require('express-handlebars').create({ defaultLayout:'main' });
@@ -67,34 +67,19 @@ app.use(function(req, res, next){
     next();
 });
 
-//log random good thing
-// Get the count of all goodthings
-GoodThing.count().exec(function (err, count) {
-
-  // Get a random entry
-  var random = Math.floor(Math.random() * count)
-
-  // Again query all users but only fetch one offset by our random #
-  GoodThing.findOne().skip(random).exec(
-    function (err, goodThing) {
-      // Tada! random user
-      console.log(goodThing.thing); 
-    })
-});
+//log random good thing using monoose-simple-random
+// GoodThing.findOneRandom(function(err, result){
+//   if(!err){
+//       console.log(result.thing);
+//   } 
+// });
 
 // routes
 app.get('/', function(req, res){
     // list all goodThings
-        GoodThing.find(function(err, goodThings){
-        
-        var context = {
-            goodThings: goodThings.map(function(goodThing){
-                return {
-                    thing: goodThing.thing,
-                }
-            })
-        };
-        res.render('home', context);
+        GoodThing.findOneRandom(function(err, goodThings){
+        var thing = {thing: goodThings.thing};
+        res.render('home', thing);
     });
 });
 
