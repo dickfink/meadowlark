@@ -3,6 +3,7 @@ var app = express();
 var fortune = require('./lib/fortune.js')
 var bodyParser  = require('body-parser');
 var credentials = require("./credentials.js")
+var GoodThing = require('./models/goodthing.js');
 // set up handlebars view engine
 var handlebars = require('express-handlebars').create({ defaultLayout:'main' });
 app.engine('handlebars', handlebars.engine);
@@ -21,6 +22,41 @@ app.use(require('express-session')({
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+// set up database
+var mongoose = require('mongoose');
+var opts = {server: { socketOptions: { keepAlive: 1 } } };
+switch (app.get('env')) {
+    case 'development':
+        mongoose.connect(credentials.mongo.development.connectionString, opts);
+        console.log('connected to DB--dev')
+        break;
+        
+    case 'production':
+        mongoose.connect(credentials.mongo.production.connectionString, opts);
+        console.log('connected to DB--prod')
+        break;
+    
+    default:
+    throw new Error('Unknown execution environment: ' + app.get('env'));
+}
+// seed database with some goodThings
+GoodThing.find(function(err, goodThings){
+    if(err) return console.log(err);
+    if(goodThings.length) return;
+    
+    new GoodThing({
+        thing: 'good thing 1',
+    }).save();
+    
+    new GoodThing({
+        thing: 'good thing 2',
+    }).save();
+    
+    new GoodThing({
+        thing: 'good thing 3',
+    }).save();
+    
+});
 // set up server
 app.set("port", process.env.PORT || 3000);
 //set up flash messages
@@ -45,13 +81,29 @@ app.get('/about', function(req, res){
 app.post('/', function(req, res){
     // log the form named "goodThing"
    console.log('Quote (from querystring):' + req.body.goodThing);
-    //   redirect back to form page
+    // show success flash  
    req.session.flash = {
        type: 'success',
        intro: 'Thank you!',
        message: "You have now been signed up for the news letter.",
    };
+   //   redirect back to form page
    res.redirect(303, '/');
+});
+
+app.get('/goodthings', function(req, res) {
+    
+    GoodThing.find(function(err, goodThings){
+        
+        var context = {
+            goodThings: goodThings.map(function(goodThing){
+                return {
+                    thing: goodThing.thing,
+                }
+            })
+        };
+        res.render('goodthings', context);
+    });
 });
 
 // custom 404 page
