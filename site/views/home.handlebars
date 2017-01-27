@@ -1,12 +1,15 @@
-<h1>Fill Up Your Good Thing Jar</h1>
+<div class="row">
+    <h1>Fill Up Your Good Thing Jar</h1>
+    <h4>What's good thing that happened today?</h4>
 <form method="POST">
-    <div>
-        <label for="goodThing">A good thing that happened today</label>
-        <input type="text" id="goodThing"  name="goodThing">
+    <div class="form-group">
+        
+        <textarea type="text" id="goodThing" class='form-control' rows="3" name="goodThing"></textarea>
     </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
+            <button type="submit" class="btn btn-success btn-lrg">Save</button>
 </form>
-
+</div>
+<div class="row">
+<h4>Remember when this good thing happened?</h4>
 <div>{{thing}}</div>
+</div>
