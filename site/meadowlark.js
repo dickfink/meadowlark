@@ -1,7 +1,11 @@
+var http = require('http');
 var express = require("express");
+var session = require('express-session');
 var app = express();
-var fortune = require('./lib/fortune.js')
 var bodyParser  = require('body-parser');
+var errorHandler = require('errorhandler');
+var cookieParser = require('cookie-parser');
+var MongoStore = require('connect-mongo')(session);
 var credentials = require("./credentials.js");
 var GoodThing = require('./models/goodthing.js');
 // set up handlebars view engine
@@ -19,6 +23,7 @@ app.use(require('express-session')({
     secret: credentials.cookieSecret,
 }))
 // set up body-parser
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
