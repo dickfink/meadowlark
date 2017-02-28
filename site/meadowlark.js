@@ -87,7 +87,6 @@ app.get('/about', function(req, res){
     res.render('about', {fortune: fortune.getFortune});
 });
 
-
 // form posting
 app.post('/', function(req, res){
     // log the form named "goodThing"

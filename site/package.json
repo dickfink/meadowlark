@@ -5,12 +5,18 @@
   "main": "meadowlark.js",
   "dependencies": {
     "body-parser": "^1.16.0",
+    "connect-mongo": "0.8.2",
     "cookie-parser": "^1.4.3",
+    "emailjs": "^1.0.4",
+    "errorhandler": "1.4.2",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.0",
+    "express-session": "1.11.3",
     "mongoose": "^4.7.8",
-    "mongoose-simple-random": "^0.3.3"
+    "mongoose-simple-random": "^0.3.3",
+    "moment": "2.10.3",
+    "stylus": "0.52.4"
   },
   "devDependencies": {
     "chai": "^3.5.0",
