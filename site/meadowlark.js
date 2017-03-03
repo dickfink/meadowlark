@@ -3,9 +3,6 @@ var express = require("express");
 var session = require('express-session');
 var app = express();
 var bodyParser  = require('body-parser');
-var errorHandler = require('errorhandler');
-var cookieParser = require('cookie-parser');
-var MongoStore = require('connect-mongo')(session);
 var credentials = require("./credentials.js");
 var GoodThing = require('./models/goodthing.js');
 // set up handlebars view engine
@@ -44,6 +41,7 @@ switch (app.get('env')) {
     default:
     throw new Error('Unknown execution environment: ' + app.get('env'));
 }
+
 // seed database with some goodThings
 GoodThing.find(function(err, goodThings){
     if(err) return console.log(err);
@@ -72,69 +70,7 @@ app.use(function(req, res, next){
     next();
 });
 
-//log random good thing using monoose-simple-random
-// GoodThing.findOneRandom(function(err, result){
-//   if(!err){
-//       console.log(result.thing);
-//   } 
-// });
-
-// routes
-app.get('/', function(req, res){
-    // list all goodThings
-        GoodThing.findOneRandom(function(err, goodThings){
-        var thing = {thing: goodThings.thing};
-        res.render('home', thing);
-    });
-});
-
-app.get('/about', function(req, res){
-    res.render('about', {fortune: fortune.getFortune});
-});
-
-// form posting
-app.post('/', function(req, res){
-    // log the form named "goodThing"
-   console.log('Quote (from querystring):' + req.body.goodThing);
-    // add goodThing to DB   
-   new GoodThing({
-       thing: req.body.goodThing,
-   }).save();
-    // show success flash  
-   req.session.flash = {
-       type: 'success',
-       message: "You have added a good thing.",
-   };
-   //   redirect back to form page
-   res.redirect(303, '/');
-});
-
-app.get('/goodthings', function(req, res) {
-    
-    GoodThing.find(function(err, goodThings){
-        
-        var context = {
-            goodThings: goodThings.map(function(goodThing){
-                return {
-                    thing: goodThing.thing,
-                }
-            })
-        };
-        res.render('goodthings', context);
-    });
-});
-
-// custom 404 page
-app.use(function(req, res){
-    res.status(404);
-    res.render('404');
-});
-
-// custom 500 page
-app.use(function(err, req, res, next){
-    console.error(err.stack);
-    res.render('500');
-});
+require('./routes')(app);
 
 app.listen(app.get('port'), function(){
     console.log("Express started...");
